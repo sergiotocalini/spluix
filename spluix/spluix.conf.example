@@ -1,0 +1,5 @@
+SPLUNK_URL="http://localhost:8089"
+SPLUNK_USER="monitor"
+SPLUNK_PASS="xxxxxxx"
+CACHE_DIR="/tmp/zocker/"
+CACHE_TTL="1"
