@@ -99,7 +99,7 @@ service() {
 	fi
     elif [[ ${params[0]} == 'version' ]]; then
 	res=$( server 'info' 'entry[0].content.version' )
-    elif [[ ${params[0]} == 'response' ]]; then
+    elif [[ ${params[0]} == 'status' ]]; then
         res=$( server 'info' 'entry[0].content.version' )
         if ! [[ -z ${res} || ${res} == "0" ]]; then
             res="1"
