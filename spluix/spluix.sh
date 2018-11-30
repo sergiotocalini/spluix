@@ -65,10 +65,10 @@ refresh_cache() {
     ttl="${CACHE_TTL}"
 
     name=`printf '%s/' "${params[@]}" 2>/dev/null`
-    [[ -z ${name} ]] && name="services/server/info"
+    [[ -z ${name} ]] && name="services/server/info/"
     endpoint="${name%?}?output_mode=json"
     
-    filename="${CACHE_DIR}/${name}.json"
+    filename="${CACHE_DIR}/${name%?}.json"
     basename=`dirname ${filename}`
     [[ -d "${basename}" ]] || mkdir -p "${basename}"
     [[ -f "${filename}" ]] || touch -d "$(( ${ttl}+1 )) minutes ago" "${filename}"
@@ -92,13 +92,13 @@ service() {
 	rcode="${?}"
 	if [[ -n ${pid} ]]; then
 	    if [[ ${params[0]} == 'uptime' ]]; then
-		res=`sudo ps -p ${pid} -o etimes -h 2>/dev/null`
+		res=`sudo ps -p ${pid} -o etimes -h 2>/dev/null | awk '{$1=$1};1'`
 	    elif [[ ${params[0]} == 'listen' ]]; then
 		[[ ${rcode} == 0 && -n ${pid} ]] && res=1
 	    fi
 	fi
     elif [[ ${params[0]} == 'version' ]]; then
-	res=$( splunk 'info' 'entry.content.version' )
+	res=$( server 'info' 'entry[0].content.version' )
     fi
     echo "${res:-0}"
     return 0
@@ -121,7 +121,8 @@ server() {
 data() {
     params=( ${@} )
     if [[ ${params[0]:-indexes} =~ (indexes|indexes-extended|index-volumes) ]]; then
-	cache=$( refresh_cache "services" "server" "${params[@]:0:${#params[@]}-1}" )
+	len=${#params[@]}
+	cache=$( refresh_cache "services" "server" "${params[@]:0:${len}-1}" )
 	if [[ ${?} == 0 ]]; then
 	    if [[ ${params[0]} == "indexes" && ${params[-1]} =~ (list|LIST|all|ALL) ]]; then
 		res=`jq -r ".entry[] | [.name, .author, .content.disabled, .content.isReady] | join(\"|\")" ${cache} 2>/dev/null`
