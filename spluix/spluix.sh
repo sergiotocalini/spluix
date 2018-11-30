@@ -108,7 +108,8 @@ service() {
 server() {
     params=( ${@} )
     if [[ ${params[0]:-info} =~ (info|introspection|status) ]]; then
-	cache=$( refresh_cache "services" "server" "${params[@]:0:${#params[@]}-1}" )
+	len=${#params[@]}
+	cache=$( refresh_cache "services" "server" "${params[@]:0:${len}-1}" )
 	if [[ ${?} == 0 ]]; then
 	    res=`jq -r ".${params[-1]}" ${cache} 2>/dev/null`
 	fi
@@ -122,7 +123,7 @@ data() {
     params=( ${@} )
     if [[ ${params[0]:-indexes} =~ (indexes|indexes-extended|index-volumes) ]]; then
 	len=${#params[@]}
-	cache=$( refresh_cache "services" "server" "${params[@]:0:${len}-1}" )
+	cache=$( refresh_cache "services" "data" "${params[@]:0:${len}-1}" )
 	if [[ ${?} == 0 ]]; then
 	    if [[ ${params[0]} == "indexes" && ${params[-1]} =~ (list|LIST|all|ALL) ]]; then
 		res=`jq -r ".entry[] | [.name, .author, .content.disabled, .content.isReady] | join(\"|\")" ${cache} 2>/dev/null`
