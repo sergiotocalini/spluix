@@ -74,8 +74,8 @@ refresh_cache() {
     [[ -f "${filename}" ]] || touch -d "$(( ${ttl}+1 )) minutes ago" "${filename}"
 
     if [[ $(( `stat -c '%Y' "${filename}" 2>/dev/null`+60*${ttl} )) -le ${TIMESTAMP} ]]; then
-	curl -sk -u "${SPLUNK_USER}:${SPLUNK_PASS}" "${SPLUNK_URL}/${endpoint}" 2>/dev/null | \
-	     jq . 2>/dev/null > "${filename}"
+	raw=`curl -sk -u "${SPLUNK_USER}:${SPLUNK_PASS}" "${SPLUNK_URL}/${endpoint}" 2>/dev/null`
+	[[ -z ${raw} ]] && jq . 2>/dev/null > "${filename}"
     fi
     echo "${filename}"
 }
@@ -100,8 +100,10 @@ service() {
     elif [[ ${params[0]} == 'version' ]]; then
 	res=$( server 'info' 'entry[0].content.version' )
     elif [[ ${params[0]} == 'response' ]]; then
-	server 'info' 'entry[0].content.version' > /dev/null
-	res="${?}"
+        res=$( server 'info' 'entry[0].content.version' )
+        if ! [[ -z ${res} || ${res} == "0" ]]; then
+            res="1"
+        fi
     fi
     echo "${res:-0}"
     return 0
