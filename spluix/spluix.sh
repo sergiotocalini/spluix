@@ -75,7 +75,7 @@ refresh_cache() {
 
     if [[ $(( `stat -c '%Y' "${filename}" 2>/dev/null`+60*${ttl} )) -le ${TIMESTAMP} ]]; then
 	raw=`curl -sk -u "${SPLUNK_USER}:${SPLUNK_PASS}" "${SPLUNK_URL}/${endpoint}" 2>/dev/null`
-	[[ -z ${raw} ]] && jq . 2>/dev/null > "${filename}"
+	[[ -z ${raw} ]] && echo "${raw}" | jq . 2>/dev/null > "${filename}"
     fi
     echo "${filename}"
 }
