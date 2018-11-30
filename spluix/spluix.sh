@@ -99,6 +99,9 @@ service() {
 	fi
     elif [[ ${params[0]} == 'version' ]]; then
 	res=$( server 'info' 'entry[0].content.version' )
+    elif [[ ${params[0]} == 'response' ]]; then
+	server 'info' 'entry[0].content.version' > /dev/null
+	res="${?}"
     fi
     echo "${res:-0}"
     return 0
