@@ -111,7 +111,7 @@ server() {
 	len=${#params[@]}
 	cache=$( refresh_cache "services" "server" "${params[@]:0:${len}-1}" )
 	if [[ ${?} == 0 ]]; then
-	    if [[ ${params[-1]} =~ (average_KBps) }}; then
+	    if [[ ${params[-1]} =~ (average_KBps) ]]; then
 		prop="entry[0].content.${params[-1]}"
 	    fi
 	    res=`jq -r ".${prop:-${params[-1]}}" ${cache} 2>/dev/null`
