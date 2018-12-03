@@ -134,7 +134,7 @@ data() {
 	cache=$( refresh_cache "services" "data" "${params[@]:0:${len}-1}" )
 	if [[ ${?} == 0 ]]; then
 	    if [[ ${params[0]} == "indexes" && ${params[-1]} =~ (list|LIST|all|ALL) ]]; then
-		res=`jq -r ".entry[] | [.name, .author, .content.disabled, .content.isReady] | join(\"|\")" ${cache} 2>/dev/null`
+		res=`jq -r ".entry[] | [.name, .author, (.content.disabled|tostring), (.content.isReady|tostring)] | join(\"|\")" ${cache} 2>/dev/null`
 	    else
 		res=`jq -r ".${params[-1]}" ${cache} 2>/dev/null`
 	    fi
