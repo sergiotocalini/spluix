@@ -20,9 +20,9 @@ cp -rpv "${SOURCE_DIR}/spluix/spluix.sh"             "${PREFIX_DIR}/"
 cp -rpv "${SOURCE_DIR}/spluix/spluix.conf.example"   "${SCRIPT_CONFIG}"
 cp -rpv "${SOURCE_DIR}/spluix/zabbix_agentd.conf"    "${ZABBIX_DIR}/zabbix_agentd.conf.d/spluix.conf"
 
-regex_array[0]="s|SPLUIX_URL=.*|SPLUIX_URL=\"${SPLUIX_URL}\"|g"
-regex_array[1]="s|SPLUIX_USER=.*|SPLUIX_USER=\"${SPLUIX_USER}\"|g"
-regex_array[2]="s|SPLUIX_PASS=.*|SPLUIX_PASS=\"${SPLUIX_PASS}\"|g"
+regex_array[0]="s|SPLUNK_URL=.*|SPLUNK_URL=\"${SPLUNK_URL}\"|g"
+regex_array[1]="s|SPLUNK_USER=.*|SPLUNK_USER=\"${SPLUNK_USER}\"|g"
+regex_array[2]="s|SPLUNK_PASS=.*|SPLUNK_PASS=\"${SPLUNK_PASS}\"|g"
 regex_array[3]="s|CACHE_DIR=.*|CACHE_DIR=\"${CACHE_DIR}\"|g"
 regex_array[4]="s|CACHE_TTL=.*|CACHE_TTL=\"${CACHE_TTL}\"|g"
 for index in ${!regex_array[*]}; do
